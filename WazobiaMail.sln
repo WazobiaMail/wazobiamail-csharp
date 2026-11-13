@@ -1,0 +1,36 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 17
+VisualStudioVersion = 17.0.31903.59
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "src", "src", "{1C6EF312-42C6-49BB-80D1-0C2BC0914E2A}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "WazobiaMail", "src\WazobiaMail\WazobiaMail.csproj", "{FACC6546-53F7-4BE6-984C-6B4A9341BAC1}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "tests", "tests", "{296578AC-956A-4AD6-90AB-04E4E7925B24}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "WazobiaMail.Tests", "tests\WazobiaMail.Tests\WazobiaMail.Tests.csproj", "{A7AD5A11-E348-45AA-8DAC-EFAD56C26ECD}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{FACC6546-53F7-4BE6-984C-6B4A9341BAC1}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{FACC6546-53F7-4BE6-984C-6B4A9341BAC1}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{FACC6546-53F7-4BE6-984C-6B4A9341BAC1}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{FACC6546-53F7-4BE6-984C-6B4A9341BAC1}.Release|Any CPU.Build.0 = Release|Any CPU
+		{A7AD5A11-E348-45AA-8DAC-EFAD56C26ECD}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{A7AD5A11-E348-45AA-8DAC-EFAD56C26ECD}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{A7AD5A11-E348-45AA-8DAC-EFAD56C26ECD}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{A7AD5A11-E348-45AA-8DAC-EFAD56C26ECD}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(NestedProjects) = preSolution
+		{FACC6546-53F7-4BE6-984C-6B4A9341BAC1} = {1C6EF312-42C6-49BB-80D1-0C2BC0914E2A}
+		{A7AD5A11-E348-45AA-8DAC-EFAD56C26ECD} = {296578AC-956A-4AD6-90AB-04E4E7925B24}
+	EndGlobalSection
+EndGlobal
