@@ -36,10 +36,11 @@ public sealed class WazobiaMailClient : IDisposable
             ? WazobiaMailOptions.DefaultBaseUrl
             : options.BaseUrl.Trim();
 
-        if (!rawBaseUrl.StartsWith("http://", StringComparison.OrdinalIgnoreCase) &&
-            !rawBaseUrl.StartsWith("https://", StringComparison.OrdinalIgnoreCase))
+        if ((!rawBaseUrl.StartsWith("http://", StringComparison.OrdinalIgnoreCase) &&
+            !rawBaseUrl.StartsWith("https://", StringComparison.OrdinalIgnoreCase)) ||
+            ContainsControlChars(rawBaseUrl))
         {
-            throw new ArgumentException("BaseUrl must start with http:// or https://.", nameof(options));
+            throw new ArgumentException("BaseUrl must start with http:// or https:// without control characters.", nameof(options));
         }
 
         if (options.Timeout <= TimeSpan.Zero)
@@ -82,6 +83,17 @@ public sealed class WazobiaMailClient : IDisposable
         }
 
         var defaultHeaders = new Dictionary<string, string>(options.DefaultHeaders, StringComparer.OrdinalIgnoreCase);
+        if (ContainsControlChars(_apiKey) || ContainsControlChars(_accessToken))
+        {
+            throw new ArgumentException("Credentials must not contain control characters.", nameof(options));
+        }
+        foreach (var pair in defaultHeaders)
+        {
+            if (ContainsControlChars(pair.Key) || pair.Key.Contains(':') || ContainsControlChars(pair.Value))
+            {
+                throw new ArgumentException($"Default header '{pair.Key}' contains illegal control characters.", nameof(options));
+            }
+        }
 
         var transport = new WazobiaHttpTransport(
             _httpClient,
@@ -235,5 +247,11 @@ public sealed class WazobiaMailClient : IDisposable
         }
 
         return null;
+    }
+
+    private static bool ContainsControlChars(string? value)
+    {
+        return !string.IsNullOrEmpty(value) &&
+               (value.Contains('\r') || value.Contains('\n') || value.Contains('\0'));
     }
 }

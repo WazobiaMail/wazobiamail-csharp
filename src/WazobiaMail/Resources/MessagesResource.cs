@@ -60,7 +60,13 @@ public sealed class MessagesResource
         };
         multipart.Add(messageContent);
 
-        foreach (var file in files)
+        var fileList = files as ICollection<FileUpload> ?? files.ToList();
+        if (fileList.Count == 0)
+        {
+            throw new ArgumentException("At least one file attachment is required.", nameof(files));
+        }
+
+        foreach (var file in fileList)
         {
             ArgumentNullException.ThrowIfNull(file);
             multipart.Add(BuildFilePart(file, "files"));
@@ -230,14 +236,33 @@ public sealed class MessagesResource
 
     private static ByteArrayContent BuildFilePart(FileUpload file, string fieldName)
     {
-        var safeFileName = Path.GetFileName(file.FileName).Replace("\"", string.Empty);
+        if (file.Content is null || file.Content.Length == 0)
+        {
+            throw new ArgumentException("Attachment content must not be empty.", nameof(file));
+        }
+
+        var safeFileName = (file.FileName ?? string.Empty)
+            .Replace("\r", "_")
+            .Replace("\n", "_")
+            .Replace("\0", "_")
+            .Replace("\"", "_")
+            .Replace("\\", "_")
+            .Replace("/", "_")
+            .Trim();
         if (string.IsNullOrWhiteSpace(safeFileName))
         {
             safeFileName = "attachment.dat";
         }
 
         var fileContent = new ByteArrayContent(file.Content);
-        fileContent.Headers.ContentType = MediaTypeHeaderValue.Parse(file.ContentType);
+        var cleanMime = (file.ContentType ?? string.Empty)
+            .Replace("\r", string.Empty)
+            .Replace("\n", string.Empty)
+            .Replace("\0", string.Empty)
+            .Trim();
+        fileContent.Headers.ContentType = MediaTypeHeaderValue.TryParse(cleanMime, out var parsedMediaType)
+            ? parsedMediaType
+            : new MediaTypeHeaderValue("application/octet-stream");
         fileContent.Headers.ContentDisposition = new ContentDispositionHeaderValue("form-data")
         {
             Name = $"\"{fieldName}\"",

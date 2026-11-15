@@ -140,4 +140,23 @@ public sealed class MessagesTests
         Assert.Contains("status=delivered", handler.Requests[2].Uri.Query, StringComparison.Ordinal);
         Assert.Contains("to=user%40example.com", handler.Requests[4].Uri.Query, StringComparison.Ordinal);
     }
+
+    [Fact]
+    public async Task UploadAttachment_ValidatesEmptyAndSanitizesFilenameAndInvalidMime()
+    {
+        var handler = new MockHttpMessageHandler();
+        handler.EnqueueJson(HttpStatusCode.OK, """{"success":true,"data":{"file":{"fileName":".._bad_file.pdf","sizeBytes":3}}}""");
+
+        using var http = new HttpClient(handler);
+        using var client = new WazobiaMailClient(new WazobiaMailOptions { ApiKey = "wzbm_test_12345678" }, http);
+
+        await Assert.ThrowsAsync<ArgumentException>(() =>
+            client.Messages.UploadAttachmentAsync(new FileUpload("empty.txt", [])));
+
+        await Assert.ThrowsAsync<ArgumentException>(() =>
+            client.Messages.SendWithAttachmentsAsync(new SendMessageRequest { To = ["a@b.com"], Subject = "s", Text = "t" }, []));
+
+        var res = await client.Messages.UploadAttachmentAsync(new FileUpload("../bad\"file.pdf", [1, 2, 3], "invalid/mime/type"));
+        Assert.Equal(".._bad_file.pdf", res.Data.File.FileName);
+    }
 }

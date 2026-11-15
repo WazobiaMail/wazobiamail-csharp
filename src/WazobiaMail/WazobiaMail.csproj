@@ -10,7 +10,7 @@
 
     <!-- NuGet Package Metadata -->
     <PackageId>WazobiaMail</PackageId>
-    <Version>0.1.0</Version>
+    <Version>0.1.1</Version>
     <Authors>Bowofade Oyerinde, Bonifade Technologies</Authors>
     <Company>Bonifade Technologies</Company>
     <Product>WazobiaMail .NET SDK</Product>

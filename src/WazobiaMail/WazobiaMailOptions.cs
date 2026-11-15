@@ -15,7 +15,7 @@ public sealed class WazobiaMailOptions
     /// <summary>
     /// The SDK version string included in the default <c>User-Agent</c> header.
     /// </summary>
-    public const string SdkVersion = "0.1.0";
+    public const string SdkVersion = "0.1.1";
 
     /// <summary>
     /// The default <c>User-Agent</c> header sent by this SDK.
